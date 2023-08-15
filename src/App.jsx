@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import axios from "axios";
+import CardItem from "./components/CardItem";
 
 function App() {
   const [items, setItems] = useState([]);
@@ -38,15 +39,15 @@ function App() {
     }
   };
 
+  //initial render
   useEffect(() => {
     fetchData();
   }, []);
-  console.log("item", isHasMore);
 
   return (
     <>
-      <div className="flex justify-center w-full items-center mt-[100px]">
-        <div className="flex justify-center h-[300px]">
+      <div className="flex justify-center w-[full] items-center mt-[100px] mb-[100px]">
+        <div className="flex justify-center w-[800px]">
           <InfiniteScroll
             dataLength={items.length}
             next={fetchData}
@@ -56,15 +57,19 @@ function App() {
           >
             <ul>
               {items.map((item, i) => (
-                <li key={item.node.id}>{item?.node?.title}</li>
+                <>
+                  <div key={item?.node?.nid}>
+                    <CardItem
+                      title={item?.node?.title}
+                      imageUrl={item?.node?.field_photo_image_section}
+                      last_update={item?.node?.last_update}
+                      id={item?.node?.nid}
+                    />
+                  </div>
+                </>
               ))}
             </ul>
           </InfiniteScroll>
-          <ul>
-            {items.map((item, i) => (
-              <li key={item.id}>{item.title}</li>
-            ))}
-          </ul>
           {error && <p>Error: {error.message}</p>}
         </div>
       </div>
